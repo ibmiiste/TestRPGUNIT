@@ -3,7 +3,7 @@
       //---------------------------------------------------------
 
        dcl-f CUSTSUMS  usage(*output);
-       dcl-f ORDERS;
+       dcl-f ORDERS2 keyed;
 
       //---------------------------------------------------------
       //  Global Variables
