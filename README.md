@@ -18,7 +18,7 @@ Context
 
 Let's assume we want to write a simple program (SUMBYCUST) that sums order amounts by customers. There will be an order file (ORDERS) and a customer report file (CUSTSUMS). Start by creating a source file.
 
-===> CRTSRCPF FILE(RUTUTORIAL) RCDLEN(112) TEXT('RPGUnit - Tutorial.')
+	===> CRTSRCPF FILE(RUTUTORIAL) RCDLEN(112) TEXT('RPGUnit - Tutorial.')
 
 Create a PF source member called ORDERS in RUTUTORIAL, with the following description.
 
@@ -46,47 +46,47 @@ Checking that we are able to write unit tests
 
 Before we write any code that is going to last, we want to be sure the testing infrastructure is working correctly. For this, we will write a dummy test. First create an RPGLE source member SUMBYCUSTT in the RUTUTORIAL source file.
 
-H NoMain                                                    
+    H NoMain                                                    
                                                             
                                                             
- //---------------------------------------------------------
- //  Prototypes                                             
- //---------------------------------------------------------
+     //---------------------------------------------------------
+     //  Prototypes                                             
+     //---------------------------------------------------------
                                                             
- /copy RPGUNIT1,TESTCASE                                    
+     /copy RPGUNIT1,TESTCASE                                    
                                                             
- // Test case prototypes.                                   
-Dtest_failure     pr                                        
+     // Test case prototypes.                                   
+    Dtest_failure     pr                                        
                                                             
                                                             
- //---------------------------------------------------------
- //  Test Case Definitions                                  
- //---------------------------------------------------------
+     //---------------------------------------------------------
+     //  Test Case Definitions                                  
+     //---------------------------------------------------------
                                                             
-Ptest_failure     b                   Export                
-Dtest_failure     pi                                        
- /free                                                      
+    Ptest_failure     b                   Export                
+    Dtest_failure     pi                                        
+     /free                                                      
                                                             
-   iEqual( 5 : 2+2 );                                       
+       iEqual( 5 : 2+2 );                                       
                                                             
- /end-free         
-P                 e
+     /end-free         
+    P                 e
 
 We compile the dummy test.
 
-===> RUCRTTST TSTPGM(SUMBYCUSTT) SRCFILE(RUTUTORIAL)
+    ===> RUCRTTST TSTPGM(SUMBYCUSTT) SRCFILE(RUTUTORIAL)
 
 We run it.
 
-===> RUCALLTST SUMBYCUSTT
-FAILURE. 1 test case, 1 assertion, 1 failure, 0 error.
+    ===> RUCALLTST SUMBYCUSTT
+    FAILURE. 1 test case, 1 assertion, 1 failure, 0 error.
 
 The dummy test fails as expected. We can remove it and write our first test.
 
 If you do not get this failure message, something is wrong with your RPGUnit framework installation. Check that the RPGUnit objects are in your library list (e.g., WRKOBJ RU*) and try to run the framework's self-test feature RPGUNITT1/MKRPGUNITT.
 The first test
 
-    The most basic test case would be one customer with one order. So we write our first test. Change SUMBYCUSTT to the following.
+The most basic test case would be one customer with one order. So we write our first test. Change SUMBYCUSTT to the following.
 
     H NoMain                                                    
                                                                 
@@ -172,7 +172,7 @@ The first test
     -----------------------                                                         
     ERROR. 1 test case, 0 assertion, 0 failure, 1 error.
 
-    The problem is that we have not created the SUMBYCUST program yet. Let's create an RPGLE source member called SUMBYCUST with the following content.
+The problem is that we have not created the SUMBYCUST program yet. Let's create an RPGLE source member called SUMBYCUST with the following content.
 
      //---------------------------------------------------------
      //  Main Procedure                                         
@@ -184,8 +184,8 @@ The first test
                    
      /end-free     
 
-    You may feel underwhelmed by this implementation. Yet it is the simplest thing that will remove the error and allow to proceed on.
-    Compile this program stub.
+You may feel underwhelmed by this implementation. Yet it is the simplest thing that will remove the error and allow to proceed on.
+Compile this program stub.
 
     ===> CRTBNDRPG PGM(SUMBYCUST) SRCFILE(RUTUTORIAL)
 
@@ -227,14 +227,14 @@ The first test
                                                                 
      /end-free                                                  
 
-    This is a fake implementation. Although it is obvious this cannot be the final implementation, it should be enough to fix the failure.
-    Compiling this new version of SUMBYCUST and running the tests suite once more, we get the following message.
+This is a fake implementation. Although it is obvious this cannot be the final implementation, it should be enough to fix the failure.
+Compiling this new version of SUMBYCUST and running the tests suite once more, we get the following message.
 
     ===> CRTBNDRPG PGM(SUMBYCUST) SRCFILE(RUTUTORIAL)
     ===> RUCALLTST SUMBYCUSTT
     FAILURE. 1 test case, 2 assertions, 1 failure, 0 error.
 
-    Has nothing changed? Maybe not. Let's check the failure report (DSPSPLF FILE(RPGUNIT) SPLNBR(*LAST)).
+Has nothing changed? Maybe not. Let's check the failure report (DSPSPLF FILE(RPGUNIT) SPLNBR(*LAST)).
 
     *** Tests from SUMBYCUSTT ***                             
     TEST_ONE_CUSTOMER_ONE_ORDER - FAILURE                     
@@ -245,8 +245,8 @@ The first test
     -----------------------                                   
     FAILURE. 1 test case, 2 assertions, 1 failure, 0 error.
 
-    The failure is different. Now, the test case finds the record it expects, but the content is wrong. Looking up line 57.00 of source member SUMBYCUSTT, we can see that the field CUSTID is wrong. It is blank, though it should contain the customer ID "A001".
-    Let's fix the program under test so that both the customer ID and the order amount sum are correct. Again, it will be only a fake implementation.
+The failure is different. Now, the test case finds the record it expects, but the content is wrong. Looking up line 57.00 of source member SUMBYCUSTT, we can see that the field CUSTID is wrong. It is blank, though it should contain the customer ID "A001".
+Let's fix the program under test so that both the customer ID and the order amount sum are correct. Again, it will be only a fake implementation.
 
      //---------------------------------------------------------
      //  Main Procedure                                         
@@ -266,8 +266,8 @@ The first test
 
     Success. 1 test case, 3 assertions, 0 failure, 0 error.
 
-    Victory! Our first test case runs successfully, albeit using a fake implementation.
-    There is some code duplication between the program under test and the test program. Let's refactor the magic values ("A001" and 1000) that we find in both programs, by really reading the ORDERS file this time.
+Victory! Our first test case runs successfully, albeit using a fake implementation.
+There is some code duplication between the program under test and the test program. Let's refactor the magic values ("A001" and 1000) that we find in both programs, by really reading the ORDERS file this time.
 
      //---------------------------------------------------------
      //  Files                                                  
@@ -291,11 +291,11 @@ The first test
                                                                 
      /end-free                                                  
 
-    We compile the refactored program and run the test. Since it is still successful, we can be sure our refactoring did not break anything that used to work. The astute reader will have noticed there is still some code duplication in the test program, but we will leave it there, because seeing the same hardcoded values in the setup part and in the check part can be nice when reading a test case.
+We compile the refactored program and run the test. Since it is still successful, we can be sure our refactoring did not break anything that used to work. The astute reader will have noticed there is still some code duplication in the test program, but we will leave it there, because seeing the same hardcoded values in the setup part and in the check part can be nice when reading a test case.
 
 Summing orders from the same customer
 
-    Let's add a test case with two orders from the same customer. This will force us to write the summing logic.
+Let's add a test case with two orders from the same customer. This will force us to write the summing logic.
 
      // Test case prototypes.                   
     Dtest_one_customer_one_order...             
@@ -361,8 +361,8 @@ Summing orders from the same customer
     -----------------------                                 
     FAILURE. 2 test cases, 6 assertions, 1 failure, 0 error.
 
-    It looks like RPGUnit has found out that our summing programming is not summing anything at all.
-    We add a simple looping logic in the SUMBYCUST program.
+It looks like RPGUnit has found out that our summing programming is not summing anything at all.
+We add a simple looping logic in the SUMBYCUST program.
 
        read ORDER;                    
                                       
@@ -373,13 +373,13 @@ Summing orders from the same customer
                                       
        write CUSTSUM;                 
 
-    Compiling the improved program and running the tests, we get a success.
+Compiling the improved program and running the tests, we get a success.
 
     ===> CRTBNDRPG PGM(SUMBYCUST) SRCFILE(RUTUTORIAL)
     ===> RUCALLTST SUMBYCUSTT
     Success. 2 test cases, 6 assertions, 0 failure, 0 error.
 
-    Although the program under test is clean (i.e., no duplication), the same cannot be said of the test program. There is some duplication between the two tests. We will now use the special procedure setUp to put the shared code. The RPGUnit framework will call this procedure once before running each test procedure. Let's factor the duplicated code of SUMBYCUSTT.
+Although the program under test is clean (i.e., no duplication), the same cannot be said of the test program. There is some duplication between the two tests. We will now use the special procedure setUp to put the shared code. The RPGUnit framework will call this procedure once before running each test procedure. Let's factor the duplicated code of SUMBYCUSTT.
 
      // Test case prototypes.            
     DsetUp            pr                 
@@ -467,11 +467,11 @@ Summing orders from the same customer
      /end-free                      
     P                 e             
 
-    After refactoring the test code, we run the test again, to make sure we did not break anything. The test program is still successful.
+After refactoring the test code, we run the test again, to make sure we did not break anything. The test program is still successful.
 
 Not summing orders from different customers
 
-    Let's add a new test case. This time, there will be two customers, with one order each.
+Let's add a new test case. This time, there will be two customers, with one order each.
 
      // Test case prototypes.            
     DsetUp            pr                 
@@ -527,8 +527,8 @@ Not summing orders from different customers
     TEST_TWO_CUSTOMERS_ONE_ORDER_EACH - FAILURE
     Expected 'A001', but was 'B002'.           
 
-    The problem is that the program under test does not handle the customer identifier at all.
-    Let's improve the program under test (i.e., SUMBYCUST) so that it handles customer breaks.
+The problem is that the program under test does not handle the customer identifier at all.
+Let's improve the program under test (i.e., SUMBYCUST) so that it handles customer breaks.
 
 
      //---------------------------------------------------------  
@@ -572,11 +572,11 @@ Not summing orders from different customers
                                                           
      /end-free                                            
 
-    Compiling the program under test and running the test program, we get a success.
+Compiling the program under test and running the test program, we get a success.
 
 Handling customers in any order
 
-    There is still a weakness in the program. Customers may not always be grouped together in the order file. We should check how the program handles that. Let's add a test in SUMBYCUSTTT.
+There is still a weakness in the program. Customers may not always be grouped together in the order file. We should check how the program handles that. Let's add a test in SUMBYCUSTTT.
 
 
     Ptest_two_customers_with_orders_not_grouped...
@@ -617,19 +617,19 @@ Handling customers in any order
      /end-free                                                       
     P                 e                                              
 
-    As could be expected, this test fails.
+As could be expected, this test fails.
 
     TEST_TWO_CUSTOMERS_WITH_ORDERS_NOT_GROUPED - FAILURE
     Expected 4000, but was 1000.                        
 
-    There are several ways to deal with the customer ordering. Here, we'll use a logical file. Let's call it ORDERS2.
+There are several ways to deal with the customer ordering. Here, we'll use a logical file. Let's call it ORDERS2.
 
                     R ORDER                     PFILE(ORDERS)
                                                              
                     K CUSTID                                 
                     K ORDERID                                
 
-    We change SUMBYCUST so that it uses ORDERS2 instead of ORDERS.
+We change SUMBYCUST so that it uses ORDERS2 instead of ORDERS.
 
      //---------------------------------------------------------
      //  Files                                                  
@@ -644,453 +644,452 @@ Source code
 
 For your convenience, here is the full source for the test program and the program under test.
 
-H NoMain                                                    
+    H NoMain                                                    
                                                             
                                                             
- //---------------------------------------------------------
- //  Files                                                  
- //---------------------------------------------------------
+     //---------------------------------------------------------
+     //  Files                                                  
+     //---------------------------------------------------------
                                                             
-FCUSTSUMS  IF   E             DISK    UsrOpn                
-FORDERS    O    E             DISK    UsrOpn                
-                                                            
-                                                            
- //---------------------------------------------------------
- //  Prototypes                                             
- //---------------------------------------------------------
-                                                            
- /copy RPGUNIT1,TESTCASE                                    
-                                                            
- // Program under test.                                     
-D SumByCust       pr                  ExtPgm('SUMBYCUST')   
-                                                            
- // Test case prototypes.                                   
-DsetUp            pr                                        
-Dtest_one_customer_one_order...                             
-D                 pr                                        
-Dtest_one_customer_two_orders...                            
-D                 pr                                        
-Dtest_two_customers_one_order_each...                       
-D                 pr                                        
-Dtest_two_customers_with_orders_not_grouped...              
-D                 pr                                        
+    FCUSTSUMS  IF   E             DISK    UsrOpn                
+    FORDERS    O    E             DISK    UsrOpn                
                                                             
                                                             
- //---------------------------------------------------------
- //  Test Case Definitions                                  
- //---------------------------------------------------------
+     //---------------------------------------------------------
+     //  Prototypes                                             
+     //---------------------------------------------------------
                                                             
-PsetUp            b                   Export                
-DsetUp            pi                                        
- /free                                                      
+     /copy RPGUNIT1,TESTCASE                                    
                                                             
-   clrpfm('ORDERS');                                        
-   clrpfm('CUSTSUMS');                                      
+     // Program under test.                                     
+    D SumByCust       pr                  ExtPgm('SUMBYCUST')   
                                                             
-   open ORDERS;                                             
-     ORDERID = 1;                                           
-     CUSTID = 'A001';                                       
-     ORDERAMT = 1000;                                       
-     write ORDER;                                           
-   close ORDERS;                                             
+     // Test case prototypes.                                   
+    DsetUp            pr                                        
+    Dtest_one_customer_one_order...                             
+    D                 pr                                        
+    Dtest_one_customer_two_orders...                            
+    D                 pr                                        
+    Dtest_two_customers_one_order_each...                       
+    D                 pr                                        
+    Dtest_two_customers_with_orders_not_grouped...              
+    D                 pr                                        
+                                                            
+                                                            
+     //---------------------------------------------------------
+     //  Test Case Definitions                                  
+     //---------------------------------------------------------
+                                                            
+    PsetUp            b                   Export                
+    DsetUp            pi                                        
+     /free                                                      
+                                                            
+       clrpfm('ORDERS');                                        
+       clrpfm('CUSTSUMS');                                      
+                                                            
+       open ORDERS;                                             
+         ORDERID = 1;                                           
+         CUSTID = 'A001';                                       
+         ORDERAMT = 1000;                                       
+         write ORDER;                                           
+       close ORDERS;                                             
                                                              
- /end-free                                                   
-P                 e                                          
+     /end-free                                                   
+    P                 e                                          
                                                              
                                                              
-Ptest_one_customer_one_order...                              
-P                 b                   Export                 
-Dtest_one_customer_one_order...                              
-D                 pi                                         
- /free                                                       
+    Ptest_one_customer_one_order...                              
+    P                 b                   Export                 
+    Dtest_one_customer_one_order...                              
+    D                 pi                                         
+     /free                                                       
                                                              
-   // Setup.                                                 
+       // Setup.                                                 
                                                              
-   // Run.                                                   
+       // Run.                                                   
                                                              
-   SumByCust();                                              
+       SumByCust();                                              
                                                              
-   // Check.                                                 
+       // Check.                                                 
                                                              
-   open CUSTSUMS;                                            
-     read CUSTSUM;                                           
-     assert( not %eof : 'File CUSTSUMS should not be empty' );
-     aEqual( 'A001' : CUSTID );                              
-     iEqual( 1000 : SUM );                  
-   close CUSTSUMS;                          
+       open CUSTSUMS;                                            
+         read CUSTSUM;                                           
+         assert( not %eof : 'File CUSTSUMS should not be empty' );
+         aEqual( 'A001' : CUSTID );                              
+         iEqual( 1000 : SUM );                  
+       close CUSTSUMS;                          
                                             
- /end-free                                  
-P                 e                         
+     /end-free                                  
+    P                 e                         
                                             
                                             
-Ptest_one_customer_two_orders...            
-P                 b                   Export
-Dtest_one_customer_two_orders...            
-D                 pi                        
- /free                                      
+    Ptest_one_customer_two_orders...            
+    P                 b                   Export
+    Dtest_one_customer_two_orders...            
+    D                 pi                        
+     /free                                      
                                             
-   // Setup.                                
+       // Setup.                                
                                             
-   open ORDERS;                             
-     ORDERID = 2;                           
-     CUSTID = 'A001';                       
-     ORDERAMT = 2000;                       
-     write ORDER;                           
-   close ORDERS;                            
+       open ORDERS;                             
+         ORDERID = 2;                           
+         CUSTID = 'A001';                       
+         ORDERAMT = 2000;                       
+         write ORDER;                           
+       close ORDERS;                            
                                             
-   // Run.                                  
+       // Run.                                  
                                             
-   SumByCust();                                              
+       SumByCust();                                              
                                                              
-   // Check.                                                 
+       // Check.                                                 
                                                              
-   open CUSTSUMS;                                            
-     read CUSTSUM;                                           
-     assert( not %eof : 'File CUSTSUMS should not be empty' );
-     aEqual( 'A001' : CUSTID );                              
-     iEqual( 1000+2000 : SUM );                              
-   close CUSTSUMS;                                           
+       open CUSTSUMS;                                            
+         read CUSTSUM;                                           
+         assert( not %eof : 'File CUSTSUMS should not be empty' );
+         aEqual( 'A001' : CUSTID );                              
+         iEqual( 1000+2000 : SUM );                              
+       close CUSTSUMS;                                           
                                                              
- /end-free                                                   
-P                 e                                          
+     /end-free                                                   
+    P                 e                                          
                                                              
                                                              
-Ptest_two_customers_one_order_each...                        
-P                 b                   Export                 
-Dtest_two_customers_one_order_each...                        
-D                 pi                                         
- /free                                                       
+    Ptest_two_customers_one_order_each...                        
+    P                 b                   Export                 
+    Dtest_two_customers_one_order_each...                        
+    D                 pi                                         
+     /free                                                       
                                                              
-   // Setup.                                                 
+       // Setup.                                                 
                                                              
-   open ORDERS;                                              
-     ORDERID = 2;                                                
-     CUSTID = 'B002';                                            
-     ORDERAMT = 2000;                                            
-     write ORDER;                                                
-   close ORDERS;                                                 
+      open ORDERS;                                              
+         ORDERID = 2;                                                
+         CUSTID = 'B002';                                            
+         ORDERAMT = 2000;                                            
+         write ORDER;                                                
+       close ORDERS;                                                 
                                                                  
-   // Run.                                                       
+       // Run.                                                       
                                                                  
-   SumByCust();                                                  
+       SumByCust();                                                  
                                                                  
-   // Check.                                                     
+       // Check.                                                     
                                                                  
-   open CUSTSUMS;                                                
-     // First customer.                                          
-     read CUSTSUM;                                               
-     assert( not %eof : 'File CUSTSUMS should not be empty' );    
-     aEqual( 'A001' : CUSTID );                                  
-     iEqual( 1000 : SUM );                                       
+       open CUSTSUMS;                                                
+         // First customer.                                          
+         read CUSTSUM;                                               
+         assert( not %eof : 'File CUSTSUMS should not be empty' );    
+         aEqual( 'A001' : CUSTID );                                  
+         iEqual( 1000 : SUM );                                       
                                                                  
-     // Second customer.                                         
-     read CUSTSUM;                                               
-     assert( not %eof : 'File CUSTSUMS should have two records' );
-     aEqual( 'B002' : CUSTID );                                  
-     iEqual( 2000 : SUM );                                       
-   close CUSTSUMS;                            
+         // Second customer.                                         
+         read CUSTSUM;                                               
+         assert( not %eof : 'File CUSTSUMS should have two records' );
+         aEqual( 'B002' : CUSTID );                                  
+         iEqual( 2000 : SUM );                                       
+       close CUSTSUMS;                            
                                               
- /end-free                                    
-P                 e                           
+     /end-free                                    
+    P                 e                           
                                               
                                               
-Ptest_two_customers_with_orders_not_grouped...
-P                 b                   Export  
-Dtest_two_customers_with_orders_not_grouped...
-D                 pi                          
- /free                                        
+    Ptest_two_customers_with_orders_not_grouped...
+    P                 b                   Export  
+    Dtest_two_customers_with_orders_not_grouped...
+    D                 pi                          
+     /free                                        
                                               
-   // Setup.                                  
+       // Setup.                                  
                                               
-   open ORDERS;                               
-     ORDERID = 2;                             
-     CUSTID = 'B002';                         
-     ORDERAMT = 2000;                         
-     write ORDER;                             
+       open ORDERS;                               
+         ORDERID = 2;                             
+         CUSTID = 'B002';                         
+         ORDERAMT = 2000;                         
+         write ORDER;                             
                                               
-     ORDERID = 3;                             
-     CUSTID = 'A001';                         
-     ORDERAMT = 3000;                         
-     write ORDER;                             
-   close ORDERS;                                             
+         ORDERID = 3;                             
+         CUSTID = 'A001';                         
+         ORDERAMT = 3000;                         
+         write ORDER;                             
+       close ORDERS;                                             
                                                              
-   // Run.                                                   
+       // Run.                                                   
                                                              
-   SumByCust();                                              
+       SumByCust();                                              
                                                              
-   // Check.                                                 
+       // Check.                                                 
                                                              
-   open CUSTSUMS;                                            
-     read CUSTSUM;                                           
-     assert( not %eof : 'File CUSTSUMS should not be empty' );
-     aEqual( 'A001' : CUSTID );                              
-     iEqual( 1000+3000 : SUM );                              
+       open CUSTSUMS;                                            
+         read CUSTSUM;                                           
+         assert( not %eof : 'File CUSTSUMS should not be empty' );
+         aEqual( 'A001' : CUSTID );                              
+         iEqual( 1000+3000 : SUM );                              
                                                              
-     // No test on second customer.                          
-   close CUSTSUMS;                                           
+         // No test on second customer.                          
+       close CUSTSUMS;                                           
                                                              
- /end-free                                                   
-P                 e                                          
+     /end-free                                                   
+    P                 e                                          
 
- //---------------------------------------------------------  
- //  Files                                                    
- //---------------------------------------------------------  
+     //---------------------------------------------------------  
+     //  Files                                                    
+     //---------------------------------------------------------  
                                                               
-FORDERS2   IF   E           K DISK                            
-FCUSTSUMS  O    E             DISK                            
-                                                              
-                                                              
- //---------------------------------------------------------  
- //  Global Variables                                         
- //---------------------------------------------------------  
-                                                              
-  // Current order.                                           
-D orderDS         ds                  LikeRec(ORDER)          
-  // Current customer sum.                                    
-D custSumDS       ds                  LikeRec(CUSTSUM:*output)
-  // Customer break indicator.                                
-D custBreak       s               n                           
+    FORDERS2   IF   E           K DISK                            
+    FCUSTSUMS  O    E             DISK                            
                                                               
                                                               
- //---------------------------------------------------------  
- //  Main Procedure                                           
- //---------------------------------------------------------  
+     //---------------------------------------------------------  
+     //  Global Variables                                         
+     //---------------------------------------------------------  
                                                               
- /free                                                
+      // Current order.                                           
+    D orderDS         ds                  LikeRec(ORDER)          
+      // Current customer sum.                                    
+    D custSumDS       ds                  LikeRec(CUSTSUM:*output)
+      // Customer break indicator.                                
+    D custBreak       s               n                           
+                                                              
+                                                              
+     //---------------------------------------------------------  
+     //  Main Procedure                                           
+     //---------------------------------------------------------  
+                                                              
+     /free                                                
                                                       
-   read ORDER orderDS;                                
-   clear custSumDS;                                   
-   custSumDS.CUSTID = orderDS.CUSTID;                 
+       read ORDER orderDS;                                
+       clear custSumDS;                                   
+       custSumDS.CUSTID = orderDS.CUSTID;                 
                                                       
-   dow not %eof;                                      
+       dow not %eof;                                      
                                                       
-     custBreak = (custSumDS.CUSTID <> orderDS.CUSTID);
-     if custBreak;                                    
-       write CUSTSUM custSumDS;                       
-       clear custSumDS;                               
-       custSumDS.CUSTID = orderDS.CUSTID;             
-     endif;                                           
+         custBreak = (custSumDS.CUSTID <> orderDS.CUSTID);
+         if custBreak;                                    
+           write CUSTSUM custSumDS;                       
+           clear custSumDS;                               
+           custSumDS.CUSTID = orderDS.CUSTID;             
+         endif;                                           
                                                       
-     custSumDS.SUM += orderDS.ORDERAMT;               
-     read ORDER orderDS;                              
-   enddo;                                             
+         custSumDS.SUM += orderDS.ORDERAMT;               
+         read ORDER orderDS;                              
+       enddo;                                             
                                                       
-   write CUSTSUM custSumDS;                           
+       write CUSTSUM custSumDS;                           
                                                       
-   *inlr = *on;                                       
+       *inlr = *on;                                       
                                                       
- /end-free                                            
+     /end-free                                            
 
 Source code in fixed position
 
 If you are not comfortable with free format, here is the equivalent in fixed-position style.
 
-H NoMain
+    H NoMain
 
 
- //---------------------------------------------------------
- //  Files
- //---------------------------------------------------------
-
- FCUSTSUMS  IF   E             DISK    UsrOpn
- FORDERS    O    E             DISK    UsrOpn
-
-
- //---------------------------------------------------------
- //  Prototypes
- //---------------------------------------------------------
-
- /copy RPGUNIT1,TESTCASE
-
- // Program under test.
-D SumByCust       pr                  ExtPgm('SUMBYCUST')
-
- // Test case prototypes.
-DsetUp            pr
-Dtest_one_customer_one_order...
-D                 pr
-Dtest_one_customer_two_orders...
-D                 pr
-Dtest_two_customers_one_order_each...
-D                 pr
-Dtest_two_customers_with_orders_not_grouped...
-D                 pr
+     //---------------------------------------------------------
+     //  Files
+     //---------------------------------------------------------
+    FCUSTSUMS  IF   E             DISK    UsrOpn
+     FORDERS    O    E             DISK    UsrOpn
 
 
- //---------------------------------------------------------
- //  Test Case Definitions
- //---------------------------------------------------------
+     //---------------------------------------------------------
+     //  Prototypes
+     //---------------------------------------------------------
 
-PsetUp            b                   Export
-DsetUp            pi
-C                   callp     clrpfm('ORDERS')
-C                   callp     clrpfm('CUSTSUMS')
+     /copy RPGUNIT1,TESTCASE
 
-C                   open      ORDERS
-C                   eval      ORDERID = 1
-C                   eval      CUSTID = 'A001'
-C                   eval      ORDERAMT = 1000
-C                   write     ORDER
-C                   close     ORDERS
-P                 e
+     // Program under test.
+    D SumByCust       pr                  ExtPgm('SUMBYCUST')
 
-
-Ptest_one_customer_one_order...
-P                 b                   Export
-Dtest_one_customer_one_order...
-D                 pi
-
- // Setup.
-
- // Run.
-C                   callp     SumByCust()
-
- // Check.
-C                   open      CUSTSUMS
-C                   read      CUSTSUM
-C                   callp     assert( not %eof
-C                                   : 'File CUSTSUMS should not be empty' )
-C                   callp     aEqual( 'A001' : CUSTID )
-C                   callp     iEqual( 1000 : SUM )
-C                   close     CUSTSUMS
-P                 e
+     // Test case prototypes.
+    DsetUp            pr
+    Dtest_one_customer_one_order...
+    D                 pr
+    Dtest_one_customer_two_orders...
+    D                 pr
+    Dtest_two_customers_one_order_each...
+    D                 pr
+    Dtest_two_customers_with_orders_not_grouped...
+    D                 pr
 
 
-Ptest_one_customer_two_orders...
-P                 b                   Export
-Dtest_one_customer_two_orders...
-D                 pi
+     //---------------------------------------------------------
+     //  Test Case Definitions
+     //---------------------------------------------------------
 
- // Setup.
-C                   open      ORDERS
-C                   eval      ORDERID = 2
-C                   eval      CUSTID = 'A001'
-C                   eval      ORDERAMT = 2000
-C                   write     ORDER
-C                   close     ORDERS
+    PsetUp            b                   Export
+    DsetUp            pi
+    C                   callp     clrpfm('ORDERS')
+    C                   callp     clrpfm('CUSTSUMS')
 
- // Run.
-C                   callp     SumByCust()
-
- // Check.
-C                   open      CUSTSUMS
-C                   read      CUSTSUM
-C                   callp     assert( not %eof
-C                                   : 'File CUSTSUMS should not be empty' )
-C                   callp     aEqual( 'A001' : CUSTID )
-C                   callp     iEqual( 1000+2000 : SUM )
-C                   close     CUSTSUMS
-
-P                 e
+    C                   open      ORDERS
+    C                   eval      ORDERID = 1
+    C                   eval      CUSTID = 'A001'
+    C                   eval      ORDERAMT = 1000
+    C                   write     ORDER
+    C                   close     ORDERS
+    P                 e
 
 
-Ptest_two_customers_one_order_each...
-P                 b                   Export
-Dtest_two_customers_one_order_each...
-D                 pi
+    Ptest_one_customer_one_order...
+    P                 b                   Export
+    Dtest_one_customer_one_order...
+    D                 pi
 
- // Setup.
-C                   open      ORDERS
-C                   eval      ORDERID = 2
-C                   eval      CUSTID = 'B002'
-C                   eval      ORDERAMT = 2000
-C                   write     ORDER
-C                   close     ORDERS
+     // Setup.
 
- // Run.
-C                   callp     SumByCust()
+     // Run.
+    C                   callp     SumByCust()
 
- // Check.
-C                   open      CUSTSUMS
- // First customer.
-C                   read      CUSTSUM
-C                   callp     assert( not %eof
-C                                   : 'File CUSTSUMS should not be empty' )
-C                   callp     aEqual( 'A001' : CUSTID )
-C                   callp     iEqual( 1000 : SUM )
-
- // Second customer.
-C                   read      CUSTSUM
-C                   callp     assert( not %eof
-C                               : 'File CUSTSUMS should have two records' )
-C                   callp     aEqual( 'B002' : CUSTID )
-C                   callp     iEqual( 2000 : SUM )
-C                   close     CUSTSUMS
-P                 e
+     // Check.
+    C                   open      CUSTSUMS
+    C                   read      CUSTSUM
+    C                   callp     assert( not %eof
+    C                                   : 'File CUSTSUMS should not be empty' )
+    C                   callp     aEqual( 'A001' : CUSTID )
+    C                   callp     iEqual( 1000 : SUM )
+    C                   close     CUSTSUMS
+    P                 e
 
 
-Ptest_two_customers_with_orders_not_grouped...
-P                 b                   Export
-Dtest_two_customers_with_orders_not_grouped...
-D                 pi
+    Ptest_one_customer_two_orders...
+    P                 b                   Export
+    Dtest_one_customer_two_orders...
+    D                 pi
 
- // Setup.
-C                   open      ORDERS
-C                   eval      ORDERID = 2
-C                   eval      CUSTID = 'B002'
-C                   eval      ORDERAMT = 2000
-C                   write     ORDER
+     // Setup.
+    C                   open      ORDERS
+    C                   eval      ORDERID = 2
+    C                   eval      CUSTID = 'A001'
+    C                   eval      ORDERAMT = 2000
+    C                   write     ORDER
+    C                   close     ORDERS
 
-C                   eval      ORDERID = 3
-C                   eval      CUSTID = 'A001'                              Back to 1st customer
-C                   eval      ORDERAMT = 3000
-C                   write     ORDER
-C                   close     ORDERS
+     // Run.
+    C                   callp     SumByCust()
 
- // Run.
-C                   callp     SumByCust()
+     // Check.
+    C                   open      CUSTSUMS
+    C                   read      CUSTSUM
+    C                   callp     assert( not %eof
+    C                                   : 'File CUSTSUMS should not be empty' )
+    C                   callp     aEqual( 'A001' : CUSTID )
+    C                   callp     iEqual( 1000+2000 : SUM )
+    C                   close     CUSTSUMS
 
- // Check.
-C                   open      CUSTSUMS
-C                   read      CUSTSUM
-C                   callp     assert( not %eof
-C                                   : 'File CUSTSUMS should not be empty' )
-C                   callp     aEqual( 'A001' : CUSTID )
-C                   callp     iEqual( 1000+3000 : SUM )
-
- // No test on second customer.
-C                   close     CUSTSUMS
-P                 e                                    
-
- //---------------------------------------------------------
- //  Files
- //---------------------------------------------------------
-
-FORDERS2   IF   E           K DISK
-FCUSTSUMS  O    E             DISK
+    P                 e
 
 
- //---------------------------------------------------------
- //  Global Variables
- //---------------------------------------------------------
+    Ptest_two_customers_one_order_each...
+    P                 b                   Export
+    Dtest_two_customers_one_order_each...
+    D                 pi
 
-  // Current order.
-D orderDS         ds                  LikeRec(ORDER)
-  // Current customer sum.
-D custSumDS       ds                  LikeRec(CUSTSUM:*output)
+     // Setup.
+    C                   open      ORDERS
+    C                   eval      ORDERID = 2
+    C                   eval      CUSTID = 'B002'
+    C                   eval      ORDERAMT = 2000
+    C                   write     ORDER
+    C                   close     ORDERS
+
+     // Run.
+    C                   callp     SumByCust()
+
+     // Check.
+    C                   open      CUSTSUMS
+     // First customer.
+    C                   read      CUSTSUM
+    C                   callp     assert( not %eof
+    C                                   : 'File CUSTSUMS should not be empty' )
+    C                   callp     aEqual( 'A001' : CUSTID )
+    C                   callp     iEqual( 1000 : SUM )
+
+     // Second customer.
+    C                   read      CUSTSUM
+    C                   callp     assert( not %eof
+    C                               : 'File CUSTSUMS should have two records' )
+    C                   callp     aEqual( 'B002' : CUSTID )
+    C                   callp     iEqual( 2000 : SUM )
+    C                   close     CUSTSUMS
+    P                 e
 
 
- //---------------------------------------------------------
- //  Main Procedure
- //---------------------------------------------------------
+    Ptest_two_customers_with_orders_not_grouped...
+    P                 b                   Export
+    Dtest_two_customers_with_orders_not_grouped...
+    D                 pi
 
-C                   READ      ORDER         orderDS
-C                   CLEAR                   custSumDS
-C                   EVAL      custSumDS.CUSTID = orderDS.CUSTID
+     // Setup.
+    C                   open      ORDERS
+    C                   eval      ORDERID = 2
+    C                   eval      CUSTID = 'B002'
+    C                   eval      ORDERAMT = 2000
+    C                   write     ORDER
 
-C                   DOW       not %eof
+    C                   eval      ORDERID = 3
+    C                   eval      CUSTID = 'A001'                              Back to 1st customer
+    C                   eval      ORDERAMT = 3000
+    C                   write     ORDER
+    C                   close     ORDERS
 
-C                   IF        custSumDS.CUSTID <> orderDS.CUSTID           Customer break
-C                   WRITE     CUSTSUM       custSumDS
-C                   CLEAR                   custSumDS
-C                   EVAL      custSumDS.CUSTID = orderDS.CUSTID
-C                   ENDIF
+     // Run.
+    C                   callp     SumByCust()
 
-C                   EVAL      custSumDS.SUM += orderDS.ORDERAMT
-C                   READ      ORDER         orderDS
-C                   ENDDO
+     // Check.
+    C                   open      CUSTSUMS
+    C                   read      CUSTSUM
+    C                   callp     assert( not %eof
+    C                                   : 'File CUSTSUMS should not be empty' )
+    C                   callp     aEqual( 'A001' : CUSTID )
+    C                   callp     iEqual( 1000+3000 : SUM )
 
-C                   WRITE     CUSTSUM       custSumDS
+     // No test on second customer.
+    C                   close     CUSTSUMS
+    P                 e                                    
 
-C                   SETON                                        LR
+     //---------------------------------------------------------
+     //  Files
+     //---------------------------------------------------------
+
+    FORDERS2   IF   E           K DISK
+    FCUSTSUMS  O    E             DISK
+
+
+     //---------------------------------------------------------
+     //  Global Variables
+     //---------------------------------------------------------
+
+      // Current order.
+    D orderDS         ds                  LikeRec(ORDER)
+          // Current customer sum.
+    D custSumDS       ds                  LikeRec(CUSTSUM:*output)
+
+
+     //---------------------------------------------------------
+     //  Main Procedure
+     //---------------------------------------------------------
+
+    C                   READ      ORDER         orderDS
+    C                   CLEAR                   custSumDS
+    C                   EVAL      custSumDS.CUSTID = orderDS.CUSTID
+
+    C                   DOW       not %eof
+
+    C                   IF        custSumDS.CUSTID <> orderDS.CUSTID           Customer break
+    C                   WRITE     CUSTSUM       custSumDS
+    C                   CLEAR                   custSumDS
+    C                   EVAL      custSumDS.CUSTID = orderDS.CUSTID
+    C                   ENDIF
+
+    C                   EVAL      custSumDS.SUM += orderDS.ORDERAMT
+    C                   READ      ORDER         orderDS
+    C                   ENDDO
+
+    C                   WRITE     CUSTSUM       custSumDS
+
+    C                   SETON                                        LR
 
