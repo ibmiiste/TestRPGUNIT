@@ -1,13 +1,11 @@
        ctl-opt NoMain;
 
-
       //---------------------------------------------------------
       //  Files
       //---------------------------------------------------------
 
        dcl-f CUSTSUMS UsrOpn;
-       dcl-f ORDERS usage(*output) UsrOpn;
-
+       dcl-f ORDERS usage(*OUTPUT) UsrOpn;
 
 
       //---------------------------------------------------------
@@ -31,8 +29,6 @@
        Dcl-pi test_one_customer_one_order;
        end-pi;
 
-
-
       // Setup.
 
          clrpfm('ORDERS');
@@ -53,7 +49,7 @@
 
          open CUSTSUMS;
          read CUSTSUM;
-         assert( not %eof : 'File CUSTSUMS should not be empty' );
+         assert( not %eof : 'Le fichier CUSTSUMS ne devrait pas être vide' );
          aEqual( 'A001' : CUSTID );
          iEqual( 1000 : SUM );
          close CUSTSUMS;
