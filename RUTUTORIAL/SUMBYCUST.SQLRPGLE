@@ -9,7 +9,11 @@
       //---------------------------------------------------------
 
        read ORDER;
-       SUM = ORDERAMT;
+
+       dow not %eof;
+         SUM += ORDERAMT;
+         read ORDER;
+       enddo;
 
        write CUSTSUM;
 
