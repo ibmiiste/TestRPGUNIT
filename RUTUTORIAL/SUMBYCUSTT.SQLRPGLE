@@ -20,6 +20,9 @@
       // Test case prototypes.
        Dcl-pr test_one_customer_one_order end-pr;
 
+       Dcl-pr test_two_customer_one_order end-pr;
+
+
 
       //---------------------------------------------------------
       //  Test Case Definitions
@@ -52,6 +55,44 @@
          assert( not %eof : 'Le fichier CUSTSUMS ne devrait pas être vide' );
          aEqual( 'A001' : CUSTID );
          iEqual( 1000 : SUM );
+         close CUSTSUMS;
+
+
+         end-proc;
+
+         dcl-Proc test_one_customer_two_orders export;
+
+         Dcl-pi test_one_customer_two_orders end-pi;
+
+
+      // Setup.
+
+         clrpfm('ORDERS');
+         clrpfm('CUSTSUMS');
+
+         open ORDERS;
+         ORDERID = 1;
+         CUSTID = 'A001';
+         ORDERAMT = 1000;
+         write ORDER;
+
+         ORDERID = 2;
+         CUSTID = 'A001';
+         ORDERAMT = 2000;
+         write ORDER;
+         close ORDERS;
+
+      // Run.
+
+         SumByCust();
+
+      // Check.
+
+         open CUSTSUMS;
+         read CUSTSUM;
+         assert( not %eof : 'File CUSTSUMS should not be empty' );
+         aEqual( 'A001' : CUSTID );
+         iEqual( 1000+2000 : SUM );
          close CUSTSUMS;
 
 
